@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/search_stocks"
+        android:icon="@drawable/ic_search"
+        android:title="@string/stocks_nav_btn_text" />
+    <item
+        android:id="@+id/favorite_stocks"
+        android:icon="@drawable/ic_favorite"
+        android:title="@string/favorite_nav_btn_text" />
+</menu>

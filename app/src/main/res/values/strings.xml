@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyStocks</string>
+    <string name="favorite_nav_btn_text">Favorite</string>
+    <string name="stocks_nav_btn_text">Stocks</string>
+</resources>
