@@ -1,5 +1,8 @@
 package com.example.mystocks.search_stocks
 
-interface SearchStocksContractView {
+import com.example.mystocks.api.StockInfoResponseType
 
+interface SearchStocksContractView {
+    fun showDefaultStocksList(defaultList: List<StockInfoResponseType>)
+    fun showError()
 }

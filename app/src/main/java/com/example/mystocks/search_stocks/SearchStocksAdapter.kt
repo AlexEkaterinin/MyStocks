@@ -5,32 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mystocks.Number
 import com.example.mystocks.R
+import com.example.mystocks.api.StockInfoResponseType
 
-class Adapter : RecyclerView.Adapter<NumbersViewHolder>() {
+class SearchStocksAdapter : RecyclerView.Adapter<NumbersViewHolder>() {
 
-    private var numbersList = mutableListOf<Number>(
-        Number(1),
-        Number(2),
-        Number(3),
-        Number(4),
-        Number(5),
-        Number(6),
-        Number(7),
-        Number(8),
-        Number(9),
-        Number(10),
-        Number(11),
-        Number(12),
-        Number(13),
-        Number(14),
-        Number(15),
-        Number(16),
-        Number(17),
-        Number(18),
-        Number(19),
-        Number(20)
-    )
-
+    private val listStocks: MutableList<StockInfoResponseType> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NumbersViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_number, parent, false)
@@ -38,10 +17,16 @@ class Adapter : RecyclerView.Adapter<NumbersViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: NumbersViewHolder, position: Int) {
-        holder.bind(numbersList[position])
+        holder.bind(listStocks[position])
     }
 
     override fun getItemCount(): Int {
-        return numbersList.size
+        return listStocks.size
+    }
+
+    fun setData(list: List<StockInfoResponseType>) {
+        listStocks.clear()
+        listStocks.addAll(list)
+        notifyDataSetChanged()
     }
 }
