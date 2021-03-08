@@ -3,7 +3,6 @@ package com.example.mystocks.search_stocks
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mystocks.Number
 import com.example.mystocks.R
 import com.example.mystocks.api.StockInfoResponseType
 
