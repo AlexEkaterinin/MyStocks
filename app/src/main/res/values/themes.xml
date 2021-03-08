@@ -2,5 +2,6 @@
     <style name="MyStocksTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/PrimaryColor</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:fontFamily">@font/open_sans_regular</item>
     </style>
 </resources>

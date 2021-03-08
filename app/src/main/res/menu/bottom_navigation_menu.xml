@@ -6,6 +6,6 @@
         android:title="@string/stocks_nav_btn_text" />
     <item
         android:id="@+id/favorite_stocks"
-        android:icon="@drawable/ic_favorite"
+        android:icon="@drawable/ic_favorite_nav"
         android:title="@string/favorite_nav_btn_text" />
 </menu>

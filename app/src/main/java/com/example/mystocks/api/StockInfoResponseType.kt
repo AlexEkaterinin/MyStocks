@@ -10,6 +10,8 @@ data class StockInfoResponseType(
     val symbol: String?,
     @SerializedName("ask")
     val price: Float?,
+    @SerializedName("currency")
+    val currency: String?,
     @SerializedName("regularMarketChange")
     val change: Float?,
     @SerializedName("regularMarketChangePercent")
