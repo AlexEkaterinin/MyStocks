@@ -1,5 +1,8 @@
 package com.example.mystocks.search_stocks
 
-interface SearchStocksContractView {
+import com.example.mystocks.model.StockModel
 
+interface SearchStocksContractView {
+    fun showDefaultStocksList(defaultList: List<StockModel>)
+    fun showError()
 }
