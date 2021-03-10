@@ -2,7 +2,6 @@ package com.example.mystocks.api
 
 import com.google.gson.annotations.SerializedName
 
-
 data class StockInfoResponseType(
     @SerializedName("longName")
     val longName: String?,
