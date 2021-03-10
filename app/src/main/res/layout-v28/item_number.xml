@@ -23,7 +23,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="IBM" />
 
         <TextView
             android:id="@+id/long_name"
@@ -37,7 +38,8 @@
             android:textSize="12sp"
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/short_name" />
+            app:layout_constraintTop_toBottomOf="@+id/short_name"
+            tools:text="International Business Machines" />
 
         <TextView
             android:id="@+id/price"
@@ -51,7 +53,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="305 USD" />
 
         <TextView
             android:id="@+id/change"
@@ -62,7 +65,8 @@
             android:layout_marginBottom="28dp"
             android:gravity="left"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="-12,3(1,14%)" />
 
         <ImageButton
             android:id="@+id/favorite_btn"
@@ -71,7 +75,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:background="@drawable/favorite_btn_selector"
-            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

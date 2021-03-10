@@ -7,16 +7,24 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mystocks.api.StockInfoResponseType
 import com.example.mystocks.databinding.SearchStocksScreenBinding
+import com.example.mystocks.mapper.StockMapper
+import com.example.mystocks.model.StockModel
 
 class SearchStocksFragment : Fragment(), SearchStocksContractView {
 
     private lateinit var binding: SearchStocksScreenBinding
-    private val stocksAdapter = SearchStocksAdapter()
+    private val stocksAdapter: SearchStocksAdapter by lazy {
+        SearchStocksAdapter(
+            favoriteListener = { stock: StockModel ->
+                stock.isFavorite = !stock.isFavorite
+                stocksAdapter.notifyDataSetChanged()
+            }
+        )
+    }
 
     private val presenter: SearchStocksPresenter by lazy {
-        SearchStocksPresenter(this)
+        SearchStocksPresenter(this, StockMapper())
     }
 
     override fun onCreateView(
@@ -50,7 +58,7 @@ class SearchStocksFragment : Fragment(), SearchStocksContractView {
         super.onDestroyView()
     }
 
-    override fun showDefaultStocksList(defaultList: List<StockInfoResponseType>) {
+    override fun showDefaultStocksList(defaultList: List<StockModel>) {
         stocksAdapter.setData(defaultList)
     }
 
