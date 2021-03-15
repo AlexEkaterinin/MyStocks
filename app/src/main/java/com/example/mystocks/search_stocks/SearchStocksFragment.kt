@@ -8,12 +8,18 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mystocks.databinding.SearchStocksScreenBinding
-import com.example.mystocks.mapper.StockMapper
 import com.example.mystocks.model.StockModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class SearchStocksFragment : Fragment(), SearchStocksContractView {
+@AndroidEntryPoint
+class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
+
+    @Inject
+    lateinit var presenter: SearchStocksScreenContract.Presenter
 
     private lateinit var binding: SearchStocksScreenBinding
+
     private val stocksAdapter: SearchStocksAdapter by lazy {
         SearchStocksAdapter(
             favoriteListener = { stock: StockModel ->
@@ -21,10 +27,6 @@ class SearchStocksFragment : Fragment(), SearchStocksContractView {
                 stocksAdapter.notifyDataSetChanged()
             }
         )
-    }
-
-    private val presenter: SearchStocksPresenter by lazy {
-        SearchStocksPresenter(this, StockMapper())
     }
 
     override fun onCreateView(
