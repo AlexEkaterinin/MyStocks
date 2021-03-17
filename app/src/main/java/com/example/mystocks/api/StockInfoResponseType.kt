@@ -6,7 +6,7 @@ data class StockInfoResponseType(
     @SerializedName("longName")
     val longName: String?,
     @SerializedName("symbol")
-    val symbol: String?,
+    val symbol: String,
     @SerializedName("ask")
     val price: Float?,
     @SerializedName("currency")
@@ -14,5 +14,6 @@ data class StockInfoResponseType(
     @SerializedName("regularMarketChange")
     val change: Float?,
     @SerializedName("regularMarketChangePercent")
-    val changePercent: Float?
+    val changePercent: Float?,
+    var isFavorite: Boolean = false
 )
