@@ -6,7 +6,8 @@ import com.example.mystocks.model.StockModel
 import javax.inject.Inject
 
 class StockMapper @Inject constructor() {
-    fun map(entity: StockInfoResponseType) =
+
+    fun fromResponseToModel(entity: StockInfoResponseType) =
         StockModel(
             longName = entity.longName,
             symbol = entity.symbol,
@@ -14,6 +15,11 @@ class StockMapper @Inject constructor() {
             currency = entity.currency,
             change = entity.change,
             changePercent = entity.changePercent,
-            isFavorite = false
+            isFavorite = entity.isFavorite
+        )
+
+    fun fromModelToEntity(model: StockModel) =
+        FavoriteStockEntity(
+            favoriteStockSymbol = model.symbol
         )
 }

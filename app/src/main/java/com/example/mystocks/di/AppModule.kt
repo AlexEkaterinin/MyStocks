@@ -1,6 +1,8 @@
 package com.example.mystocks.di
 
 import androidx.fragment.app.Fragment
+import com.example.mystocks.StockInfoInteractor
+import com.example.mystocks.StockInfoInteractorImpl
 import com.example.mystocks.search_stocks.*
 import dagger.Binds
 import dagger.Module
@@ -18,6 +20,10 @@ abstract class AppModule {
 
     @Binds
     abstract fun bindSearchStocksPresenter(impl: SearchStocksPresenter): SearchStocksScreenContract.Presenter
+
+    @Binds
+    abstract fun bindSearchInfoInteractor(impl: StockInfoInteractorImpl): StockInfoInteractor
+
 }
 
 @InstallIn(FragmentComponent::class)

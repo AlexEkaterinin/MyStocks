@@ -11,6 +11,7 @@ interface SearchStocksScreenContract {
 
     interface Presenter {
         fun getDefaultStockList()
+        fun changeFavorite(stock: StockModel)
         fun dispose()
     }
 }

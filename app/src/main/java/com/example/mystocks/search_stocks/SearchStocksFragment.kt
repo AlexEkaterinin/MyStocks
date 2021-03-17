@@ -23,6 +23,7 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
     private val stocksAdapter: SearchStocksAdapter by lazy {
         SearchStocksAdapter(
             favoriteListener = { stock: StockModel ->
+                presenter.changeFavorite(stock)
                 stock.isFavorite = !stock.isFavorite
                 stocksAdapter.notifyDataSetChanged()
             }
