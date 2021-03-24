@@ -2,6 +2,8 @@ package com.example.mystocks
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import com.example.mystocks.databinding.MainActivityBinding
 import com.example.mystocks.favorite_stocks.FavoriteStocksFragment
 import com.example.mystocks.search_stocks.SearchStocksFragment
@@ -24,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragmentsContainer, searchStocksFragment)
-            .add(R.id.fragmentsContainer, favoriteStocksFragment)
             .commit()
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(navListener)
@@ -35,15 +36,15 @@ class MainActivity : AppCompatActivity() {
         when (menuItem.itemId) {
             R.id.search_stocks -> {
                 supportFragmentManager.beginTransaction()
-                    .hide(favoriteStocksFragment)
-                    .show(searchStocksFragment)
+                    .replace(R.id.fragmentsContainer, searchStocksFragment)
+                    .addToBackStack(searchStocksFragment::class.java.canonicalName)
                     .commit()
                 true
             }
             R.id.favorite_stocks -> {
                 supportFragmentManager.beginTransaction()
-                    .hide(searchStocksFragment)
-                    .show(favoriteStocksFragment)
+                    .replace(R.id.fragmentsContainer, favoriteStocksFragment)
+                    .addToBackStack(favoriteStocksFragment::class.java.canonicalName)
                     .commit()
                 true
             }

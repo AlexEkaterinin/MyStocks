@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="100"
+                motion:motionTarget="@+id/search_field" />
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/search_field" />
+
+        </KeyFrameSet>
+        <OnSwipe
+            motion:moveWhenScrollAtTop="false"
+            motion:touchAnchorId="@+id/search_field"
+            motion:touchAnchorSide="bottom" />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint android:id="@+id/no_favorite_message">
+            <PropertySet
+                android:visibility="gone"
+                motion:visibilityMode="ignore" />
+        </Constraint>
+
+        <Constraint android:id="@+id/search_field">
+            <PropertySet
+                android:visibility="gone"
+                motion:visibilityMode="ignore" />
+        </Constraint>
+
+        <Constraint android:id="@+id/rv_favorite_stocks">
+            <PropertySet
+                android:visibility="gone"
+                motion:visibilityMode="ignore" />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/search_field"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="24dp"
+            android:visibility="invisible"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint android:id="@+id/no_favorite_message">
+            <PropertySet
+                android:visibility="gone"
+                motion:visibilityMode="ignore" />
+        </Constraint>
+
+        <Constraint android:id="@+id/rv_favorite_stocks">
+            <PropertySet
+                android:visibility="gone"
+                motion:visibilityMode="ignore" />
+        </Constraint>
+
+    </ConstraintSet>
+</MotionScene>

@@ -1,6 +1,7 @@
 package com.example.mystocks.search_stocks
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +21,12 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
 
     private lateinit var binding: SearchStocksScreenBinding
 
-    private val stocksAdapter: SearchStocksAdapter by lazy {
+    private val searchStocksAdapter: SearchStocksAdapter by lazy {
         SearchStocksAdapter(
             favoriteListener = { stock: StockModel ->
                 presenter.changeFavorite(stock)
                 stock.isFavorite = !stock.isFavorite
-                stocksAdapter.notifyDataSetChanged()
+                searchStocksAdapter.notifyDataSetChanged()
             }
         )
     }
@@ -47,7 +48,7 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
 
         rvStocks.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = stocksAdapter
+            adapter = searchStocksAdapter
         }
     }
 
@@ -56,13 +57,14 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
         presenter.getDefaultStockList()
     }
 
-    override fun onDestroyView() {
+    override fun onDetach() {
         presenter.dispose()
-        super.onDestroyView()
+        super.onDetach()
     }
 
+
     override fun showDefaultStocksList(defaultList: List<StockModel>) {
-        stocksAdapter.setData(defaultList)
+        searchStocksAdapter.setData(defaultList)
     }
 
     override fun showError() {

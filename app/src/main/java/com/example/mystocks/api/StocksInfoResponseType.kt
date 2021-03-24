@@ -2,7 +2,7 @@ package com.example.mystocks.api
 
 import com.google.gson.annotations.SerializedName
 
-data class StockInfoResponseType(
+data class StocksInfoResponseType(
     @SerializedName("longName")
     val longName: String?,
     @SerializedName("symbol")
