@@ -11,10 +11,10 @@ interface FavoriteStocksDao {
     fun getAllFavoriteStocks(): List<String>
 
     @Query("SELECT * FROM favorite_stocks_table WHERE favorite_symbol LIKE :symbol")
-    fun getRequestedStocks(symbol: String): List<FavoriteStockEntity>
+    fun getRequestedStocks(symbol: String): List<FavoriteStocksEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFavoriteStock(stock: FavoriteStockEntity)
+    fun insertFavoriteStock(stocks: FavoriteStocksEntity)
 
     @Query("DELETE FROM favorite_stocks_table WHERE favorite_symbol LIKE :symbol")
     fun removeFavoriteStock(symbol: String)

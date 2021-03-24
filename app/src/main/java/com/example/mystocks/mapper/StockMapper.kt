@@ -1,13 +1,13 @@
 package com.example.mystocks.mapper
 
-import com.example.mystocks.api.StockInfoResponseType
-import com.example.mystocks.db.FavoriteStockEntity
+import com.example.mystocks.api.StocksInfoResponseType
+import com.example.mystocks.db.FavoriteStocksEntity
 import com.example.mystocks.model.StockModel
 import javax.inject.Inject
 
 class StockMapper @Inject constructor() {
 
-    fun fromResponseToModel(entity: StockInfoResponseType) =
+    fun fromResponseToModel(entity: StocksInfoResponseType) =
         StockModel(
             longName = entity.longName,
             symbol = entity.symbol,
@@ -19,7 +19,7 @@ class StockMapper @Inject constructor() {
         )
 
     fun fromModelToEntity(model: StockModel) =
-        FavoriteStockEntity(
+        FavoriteStocksEntity(
             favoriteStockSymbol = model.symbol
         )
 }

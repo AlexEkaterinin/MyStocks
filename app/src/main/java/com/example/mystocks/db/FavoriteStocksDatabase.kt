@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [
-        FavoriteStockEntity::class
+        FavoriteStocksEntity::class
     ],
     version = 1,
     exportSchema = false

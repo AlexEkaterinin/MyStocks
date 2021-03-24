@@ -1,8 +1,9 @@
 package com.example.mystocks
 
-import com.example.mystocks.api.StockInfoResponseType
 import com.example.mystocks.api.StocksApi
+import com.example.mystocks.api.StocksInfoResponseType
 import com.example.mystocks.db.FavoriteStocksDao
+import com.example.mystocks.db.FavoriteStocksEntity
 import com.example.mystocks.mapper.StockMapper
 import com.example.mystocks.model.StockModel
 import io.reactivex.Completable
@@ -11,12 +12,22 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 interface StockInfoInteractor {
+
     fun getAllFavoriteLocalStocks(): Single<List<String>>
+
     fun changeFavorite(stock: StockModel): Completable
+
     fun insertFavoriteStock(stock: StockModel): Completable
+
     fun removeFavoriteStock(stock: StockModel): Completable
-    fun getDowJonesList(): Single<List<StockInfoResponseType>>
-    fun getDefaultStocksList(): Single<List<StockInfoResponseType>>
+
+    fun getDowJonesList(): Single<List<StocksInfoResponseType>>
+
+    fun getDefaultStocksList(): Single<List<StocksInfoResponseType>>
+
+    fun getFavoriteStocksList(): Single<List<StocksInfoResponseType>>
+
+    fun checkAvailableFavoriteStocks(): Single<Boolean>
 }
 
 class StockInfoInteractorImpl @Inject constructor(
@@ -32,6 +43,13 @@ class StockInfoInteractorImpl @Inject constructor(
             insertFavoriteStock(stock)
         }
 
+    override fun checkAvailableFavoriteStocks(): Single<Boolean> =
+        getAllFavoriteLocalStocks()
+            .subscribeOn(Schedulers.io())
+            .map { favoriteList ->
+                favoriteList.isEmpty()
+            }
+
     override fun insertFavoriteStock(stock: StockModel): Completable =
         Completable.create { emitter ->
             dao.insertFavoriteStock(mapper.fromModelToEntity(stock))
@@ -44,13 +62,13 @@ class StockInfoInteractorImpl @Inject constructor(
             emitter.onComplete()
         }
 
-    override fun getDefaultStocksList(): Single<List<StockInfoResponseType>> =
+    override fun getDefaultStocksList(): Single<List<StocksInfoResponseType>> =
         Single.zip(
             getDowJonesList().subscribeOn(Schedulers.io()),
             getAllFavoriteLocalStocks().subscribeOn(Schedulers.io()),
             { responseList, savedFavoriteList ->
-                responseList.toMutableList().forEach {stock ->
-                    if(savedFavoriteList.contains(stock.symbol)) {
+                responseList.toMutableList().forEach { stock ->
+                    if (savedFavoriteList.contains(stock.symbol)) {
                         stock.isFavorite = true
                     }
                 }
@@ -58,7 +76,21 @@ class StockInfoInteractorImpl @Inject constructor(
             }
         )
 
-    override fun getDowJonesList(): Single<List<StockInfoResponseType>> =
+    override fun getFavoriteStocksList(): Single<List<StocksInfoResponseType>> =
+        getAllFavoriteLocalStocks()
+            .subscribeOn(Schedulers.io())
+            .flatMap { favoriteList ->
+                val apiPath = favoriteList.toMutableList().joinToString(",")
+                api.getFavoriteStocksList(apiPath)
+            }
+            .map { responseList ->
+                responseList.toMutableList().forEach { stock ->
+                    stock.isFavorite = true
+                }
+                responseList.toList()
+            }
+
+    override fun getDowJonesList(): Single<List<StocksInfoResponseType>> =
         api.getDowJonesList()
 
     override fun getAllFavoriteLocalStocks(): Single<List<String>> =
