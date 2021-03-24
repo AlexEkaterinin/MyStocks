@@ -1,32 +1,29 @@
 package com.example.mystocks.search_stocks
 
-import com.example.mystocks.api.ServiceBuilder
+import com.example.mystocks.StockInfoInteractor
 import com.example.mystocks.mapper.StockMapper
 import com.example.mystocks.model.StockModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
-class SearchStocksPresenter(
-    private val view: SearchStocksContractView,
-    private val mapper: StockMapper
-) {
+class SearchStocksPresenter @Inject constructor(
+    private val mapper: StockMapper,
+    private val view: SearchStocksScreenContract.View,
+    private val interactor: StockInfoInteractor
+) : SearchStocksScreenContract.Presenter {
 
-    private val api = ServiceBuilder.api
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-
-    fun getDefaultStockList() {
+    override fun getDefaultStockList() {
         disposables.add(
-            api.getDowJonesList()
-                .subscribeOn(Schedulers.io())
+            interactor.getDefaultStocksList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { stockList ->
-
-                        val stockInfoList = stockList.map(mapper::map)
-
+                    { responseList ->
+                        val stockInfoList = responseList.map(mapper::fromResponseToModel)
                         view.showDefaultStocksList(stockInfoList)
                     }, {
                         view.showError()
@@ -34,7 +31,16 @@ class SearchStocksPresenter(
         )
     }
 
-    fun dispose() {
+    override fun changeFavorite(stock: StockModel) {
+        disposables.add(
+            interactor.changeFavorite(stock)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        )
+    }
+
+    override fun dispose() {
         disposables.dispose()
     }
 }

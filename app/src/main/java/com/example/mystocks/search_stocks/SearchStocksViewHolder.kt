@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mystocks.R
 import com.example.mystocks.model.StockModel
 
-class NumbersViewHolder(
+class SearchStocksViewHolder(
     itemView: View,
     private val favoriteListener: (stock: StockModel) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
