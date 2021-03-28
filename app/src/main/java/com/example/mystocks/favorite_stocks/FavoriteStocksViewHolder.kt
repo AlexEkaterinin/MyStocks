@@ -10,7 +10,7 @@ import com.example.mystocks.model.StockModel
 
 class FavoriteStocksViewHolder(
     itemView: View,
-    private val favoriteListener: (stock: StockModel) -> Unit
+    private val favoriteListener: (stock: StockModel, position: Int) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
 
     private var shortName: TextView = itemView.findViewById(R.id.short_name)
@@ -22,8 +22,8 @@ class FavoriteStocksViewHolder(
     private var decreaseColor = 0
 
     init {
-        increaseColor = ContextCompat.getColor(itemView.context, R.color.IncreasePriceColor)
-        decreaseColor = ContextCompat.getColor(itemView.context, R.color.DecreasePriceColor)
+        increaseColor = ContextCompat.getColor(itemView.context, R.color.increasePriceColor)
+        decreaseColor = ContextCompat.getColor(itemView.context, R.color.decreasePriceColor)
     }
 
 
@@ -45,7 +45,7 @@ class FavoriteStocksViewHolder(
         }
 
         favoriteBtn.setOnClickListener {
-            favoriteListener.invoke(item)
+            favoriteListener.invoke(item, adapterPosition)
         }
     }
 }

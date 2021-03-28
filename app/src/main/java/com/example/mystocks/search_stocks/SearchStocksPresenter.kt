@@ -20,14 +20,29 @@ class SearchStocksPresenter @Inject constructor(
     override fun getDefaultStockList() {
         disposables.add(
             interactor.getDefaultStocksList()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { responseList ->
                         val stockInfoList = responseList.map(mapper::fromResponseToModel)
-                        view.showDefaultStocksList(stockInfoList)
+                        view.showStocksList(stockInfoList)
                     }, {
-                        view.showError()
+                        view.showError(it.printStackTrace().toString())
                     })
+        )
+    }
+
+    override fun getSearchedStock(symbol: String) {
+        disposables.add(
+            interactor.getSearchedStock(symbol)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ responseList ->
+                    val stockInfoList = responseList.map(mapper::fromResponseToModel)
+                    view.showStocksList(stockInfoList)
+                }, {
+                    view.showError(it.printStackTrace().toString())
+                })
         )
     }
 
@@ -37,6 +52,20 @@ class SearchStocksPresenter @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
+        )
+    }
+
+    override fun checkAvailableSearchedStocks(symbol: String) {
+        disposables.add(
+            interactor.checkAvailableSearchedStocks(symbol)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ isSearchedStockAvailable ->
+                    if (isSearchedStockAvailable) {
+                        getSearchedStock(symbol)
+                    } else view.showNotFoundStocksMessage(true)
+                }, {
+                    view.showNotFoundStocksMessage(true)
+                })
         )
     }
 

@@ -41,6 +41,7 @@ class FavoriteStocksPresenter @Inject constructor(
     override fun checkAvailableFavoriteStocks() {
         disposables.add(
             interactor.checkAvailableFavoriteStocks()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { favoriteListIsEmpty ->
                     view.showScreenOfAvailableStocks(favoriteListIsEmpty)

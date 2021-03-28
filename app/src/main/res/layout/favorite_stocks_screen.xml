@@ -20,6 +20,7 @@
         android:drawablePadding="10dp"
         android:inputType="text"
         android:maxLines="1"
+        android:hint="@string/search_stock_hint_text"
         android:paddingStart="15dp"
         android:paddingLeft="15dp"
         android:paddingEnd="15dp"
@@ -44,7 +45,7 @@
     <TextView
         android:id="@+id/no_favorite_message"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/no_favorite_stocks_message_text"
         android:textSize="20sp"
