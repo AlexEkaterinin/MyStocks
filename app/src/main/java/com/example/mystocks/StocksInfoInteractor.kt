@@ -3,7 +3,6 @@ package com.example.mystocks
 import com.example.mystocks.api.StocksApi
 import com.example.mystocks.api.StocksInfoResponseType
 import com.example.mystocks.db.FavoriteStocksDao
-import com.example.mystocks.db.FavoriteStocksEntity
 import com.example.mystocks.mapper.StockMapper
 import com.example.mystocks.model.StockModel
 import io.reactivex.Completable
@@ -21,6 +20,8 @@ interface StockInfoInteractor {
 
     fun removeFavoriteStock(stock: StockModel): Completable
 
+    fun getSearchedStock(symbol: String): Single<List<StocksInfoResponseType>>
+
     fun getDowJonesList(): Single<List<StocksInfoResponseType>>
 
     fun getDefaultStocksList(): Single<List<StocksInfoResponseType>>
@@ -28,6 +29,10 @@ interface StockInfoInteractor {
     fun getFavoriteStocksList(): Single<List<StocksInfoResponseType>>
 
     fun checkAvailableFavoriteStocks(): Single<Boolean>
+
+    fun checkAvailableSearchedStocks(symbol: String): Single<Boolean>
+
+    fun isCorrectResponseStocks(stocksList: List<StocksInfoResponseType>): Boolean
 }
 
 class StockInfoInteractorImpl @Inject constructor(
@@ -45,10 +50,19 @@ class StockInfoInteractorImpl @Inject constructor(
 
     override fun checkAvailableFavoriteStocks(): Single<Boolean> =
         getAllFavoriteLocalStocks()
-            .subscribeOn(Schedulers.io())
             .map { favoriteList ->
                 favoriteList.isEmpty()
             }
+
+    override fun checkAvailableSearchedStocks(symbol: String): Single<Boolean> =
+        getSearchedStock(symbol)
+            .map { responseList ->
+                isCorrectResponseStocks(responseList)
+            }
+
+    override fun isCorrectResponseStocks(stocksList: List<StocksInfoResponseType>): Boolean {
+        return !(stocksList.first().price == null || stocksList.first().currency == null || stocksList.first().change == null || stocksList.isEmpty())
+    }
 
     override fun insertFavoriteStock(stock: StockModel): Completable =
         Completable.create { emitter ->
@@ -61,6 +75,20 @@ class StockInfoInteractorImpl @Inject constructor(
             dao.removeFavoriteStock(stock.symbol)
             emitter.onComplete()
         }
+
+    override fun getSearchedStock(symbol: String): Single<List<StocksInfoResponseType>> =
+        Single.zip(
+            api.getSpecificStocksList(symbol).subscribeOn(Schedulers.io()),
+            getAllFavoriteLocalStocks().subscribeOn(Schedulers.io()),
+            { responseList, savedFavoriteList ->
+                responseList.toMutableList().forEach { stock ->
+                    if (savedFavoriteList.contains(stock.symbol)) {
+                        stock.isFavorite = true
+                    }
+                }
+                responseList.toList()
+            }
+        )
 
     override fun getDefaultStocksList(): Single<List<StocksInfoResponseType>> =
         Single.zip(
@@ -81,7 +109,7 @@ class StockInfoInteractorImpl @Inject constructor(
             .subscribeOn(Schedulers.io())
             .flatMap { favoriteList ->
                 val apiPath = favoriteList.toMutableList().joinToString(",")
-                api.getFavoriteStocksList(apiPath)
+                api.getSpecificStocksList(apiPath)
             }
             .map { responseList ->
                 responseList.toMutableList().forEach { stock ->

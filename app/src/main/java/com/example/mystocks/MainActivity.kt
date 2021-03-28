@@ -2,8 +2,6 @@ package com.example.mystocks
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import com.example.mystocks.databinding.MainActivityBinding
 import com.example.mystocks.favorite_stocks.FavoriteStocksFragment
 import com.example.mystocks.search_stocks.SearchStocksFragment
