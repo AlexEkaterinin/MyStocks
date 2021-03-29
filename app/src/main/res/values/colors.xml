@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#1A1A1A</color>
+    <color name="colorWhite">#FFF</color>
     <color name="decreasePriceColor">#B22424</color>
     <color name="increasePriceColor">#24B25D</color>
 </resources>

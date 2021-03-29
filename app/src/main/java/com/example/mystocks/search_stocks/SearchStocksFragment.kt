@@ -1,5 +1,6 @@
 package com.example.mystocks.search_stocks
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mystocks.company_profile.CompanyProfileActivity
 import com.example.mystocks.databinding.SearchStocksScreenBinding
 import com.example.mystocks.isVisible
 import com.example.mystocks.model.StockModel
@@ -30,6 +32,9 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
                 presenter.changeFavorite(stock)
                 stock.isFavorite = !stock.isFavorite
                 searchStocksAdapter.notifyDataSetChanged()
+            },
+            showCompanyProfileListener = { stock: StockModel ->
+                showCompanyProfile(stock)
             }
         )
     }
@@ -100,16 +105,6 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
         showNotFoundStocksMessage(false)
     }
 
-    override fun showLargeProgress(show: Boolean) {
-        if (STOCKS_LIST_HAS_SET) {
-            binding.largeProgressBar.isVisible(!show)
-        } else binding.largeProgressBar.isVisible(show)
-    }
-
-    override fun showSmallProgress(show: Boolean) {
-        binding.smallProgressBar.isVisible(show)
-    }
-
     override fun showNotFoundStocksMessage(show: Boolean) {
         if(show) {
             showSmallProgress(!show)
@@ -120,6 +115,24 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
 
     override fun showError() {
         Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_LONG).show()
+    }
+
+    private fun showCompanyProfile(stock: StockModel) {
+        val intent = Intent(activity,CompanyProfileActivity::class.java)
+        intent.putExtra("symbol", stock.symbol)
+        intent.putExtra("companyName", stock.longName)
+        intent.putExtra("isFavorite", stock.isFavorite)
+        startActivity(intent)
+    }
+
+    private fun showLargeProgress(show: Boolean) {
+        if (STOCKS_LIST_HAS_SET) {
+            binding.largeProgressBar.isVisible(!show)
+        } else binding.largeProgressBar.isVisible(show)
+    }
+
+    private fun showSmallProgress(show: Boolean) {
+        binding.smallProgressBar.isVisible(show)
     }
 
     companion object {

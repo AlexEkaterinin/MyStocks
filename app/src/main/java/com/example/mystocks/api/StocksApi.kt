@@ -20,4 +20,12 @@ interface StocksApi {
     fun getSpecificStocksList(
         @Query("symbol") specificStocks: String?
     ): Single<List<StocksInfoResponseType>>
+
+    @GET(
+        "qu/quote/profile/?" +
+                "apikey=z5YZZXUlufcRP5FLXDCVCB0sJ2RbYumfJ0bXN7ol2l5MNrtC1ZvhQkdsiozr&"
+    )
+    fun getCompanyProfileInfo(
+        @Query("symbol") companySymbol: String?
+    ): Single<CompanyInfoResponseType>
 }

@@ -1,5 +1,6 @@
 package com.example.mystocks
 
+import com.example.mystocks.api.CompanyInfoResponseType
 import com.example.mystocks.api.StocksApi
 import com.example.mystocks.api.StocksInfoResponseType
 import com.example.mystocks.db.FavoriteStocksDao
@@ -18,19 +19,25 @@ interface StockInfoRepository {
     fun getSpecificStocksList(symbol: String): Single<List<StocksInfoResponseType>>
 
     fun getDowJonesList(): Single<List<StocksInfoResponseType>>
+
+    fun getCompanyProfileInfo(symbol: String?): Single<CompanyInfoResponseType>
+
+    fun insertFavoriteStock(symbol: String?): Completable
+
+    fun removeFavoriteStock(symbol: String?): Completable
 }
 
 class StocksInfoRepositoryImpl @Inject constructor(
     private val dao: FavoriteStocksDao,
     private val api: StocksApi,
     private val mapper: StockMapper
-): StockInfoRepository {
+) : StockInfoRepository {
 
     override fun changeFavorite(stock: StockModel): Completable =
         if (stock.isFavorite) {
-            removeFavoriteStock(stock)
+            removeFavoriteStock(stock.symbol)
         } else {
-            insertFavoriteStock(stock)
+            insertFavoriteStock(stock.symbol)
         }
 
     override fun getAllFavoriteLocalStocks(): Single<List<String>> =
@@ -44,15 +51,18 @@ class StocksInfoRepositoryImpl @Inject constructor(
     override fun getDowJonesList(): Single<List<StocksInfoResponseType>> =
         api.getDowJonesList()
 
-    private fun insertFavoriteStock(stock: StockModel): Completable =
+    override fun getCompanyProfileInfo(symbol: String?): Single<CompanyInfoResponseType> =
+        api.getCompanyProfileInfo(symbol)
+
+    override fun insertFavoriteStock(symbol: String?): Completable =
         Completable.create { emitter ->
-            dao.insertFavoriteStock(mapper.fromModelToEntity(stock))
+            dao.insertFavoriteStock(mapper.fromModelToStockEntity(symbol))
             emitter.onComplete()
         }
 
-    private fun removeFavoriteStock(stock: StockModel): Completable =
+    override fun removeFavoriteStock(symbol: String?): Completable =
         Completable.create { emitter ->
-            dao.removeFavoriteStock(stock.symbol)
+            dao.removeFavoriteStock(symbol)
             emitter.onComplete()
         }
 }
