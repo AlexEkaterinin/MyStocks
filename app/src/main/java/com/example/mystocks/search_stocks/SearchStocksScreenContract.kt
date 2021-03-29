@@ -10,7 +10,7 @@ interface SearchStocksScreenContract {
         fun showLargeProgress(show: Boolean)
         fun showSmallProgress(show: Boolean)
         fun showNotFoundStocksMessage(show: Boolean)
-        fun showError(error: String)
+        fun showError()
     }
 
     interface Presenter {

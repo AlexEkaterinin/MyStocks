@@ -27,7 +27,8 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
         FavoriteStocksAdapter(
             favoriteListener = { stock: StockModel, position: Int ->
                 presenter.changeFavorite(stock)
-                favoriteStocksAdapter.removeItem(position)
+                favoriteStocksAdapter.removeItem(stock, position)
+                if(favoriteStocksAdapter.isStockLast()) showScreenOfAvailableStocks(true)
             }
         )
     }
@@ -68,9 +69,9 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
         presenter.checkAvailableFavoriteStocks()
     }
 
-    override fun onDetach() {
+    override fun onDestroy() {
         presenter.dispose()
-        super.onDetach()
+        super.onDestroy()
     }
 
     override fun showFavoriteStocksList(favoriteList: List<StockModel>) {
@@ -83,7 +84,7 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
         binding.noFavoriteMessage.isVisible(isShow)
     }
 
-    override fun showError(error: String) {
-        Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+    override fun showError() {
+        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_LONG).show()
     }
 }

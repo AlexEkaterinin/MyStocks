@@ -87,9 +87,9 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
         if(binding.searchField.text.isEmpty()) presenter.getDefaultStockList()
     }
 
-    override fun onDetach() {
+    override fun onDestroy() {
         presenter.dispose()
-        super.onDetach()
+        super.onDestroy()
     }
 
     override fun showStocksList(stocksList: List<StockModel>) {
@@ -118,8 +118,8 @@ class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
         } else binding.notFoundMessage.isVisible(show)
     }
 
-    override fun showError(error: String) {
-        Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+    override fun showError() {
+        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_LONG).show()
     }
 
     companion object {

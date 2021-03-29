@@ -24,7 +24,7 @@ class FavoriteStocksPresenter @Inject constructor(
                     val stockInfoList = responseList.map(mapper::fromResponseToModel)
                     view.showFavoriteStocksList(stockInfoList)
                 }, {
-                    view.showError(it.printStackTrace().toString())
+                    view.showError()
                 })
         )
     }

@@ -2,7 +2,9 @@
     <string name="app_name">MyStocks</string>
     <string name="favorite_nav_btn_text">Favorite</string>
     <string name="stocks_nav_btn_text">Stocks</string>
-    <string name="no_favorite_stocks_message_text">You do not have favorite stocks</string>
-    <string name="not_stocks_found_message_text">No stocks found. Check the correctness of the entered symbols</string>
+    <string name="no_favorite_stocks_message_text">You do not have favorite stocks.</string>
+    <string name="not_stocks_found_message_text">No stocks found. Check the correctness of the entered symbols.</string>
     <string name="search_stock_hint_text">Enter stock symbols</string>
+    <string name="disconnected_message_text">DISCONNECTED</string>
+    <string name="disconnected_prompt_text">Please, check your internet connection.</string>
 </resources>

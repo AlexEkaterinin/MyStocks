@@ -27,7 +27,7 @@ class SearchStocksPresenter @Inject constructor(
                         val stockInfoList = responseList.map(mapper::fromResponseToModel)
                         view.showStocksList(stockInfoList)
                     }, {
-                        view.showError(it.printStackTrace().toString())
+                        view.showError()
                     })
         )
     }
@@ -41,7 +41,7 @@ class SearchStocksPresenter @Inject constructor(
                     val stockInfoList = responseList.map(mapper::fromResponseToModel)
                     view.showStocksList(stockInfoList)
                 }, {
-                    view.showError(it.printStackTrace().toString())
+                    view.showError()
                 })
         )
     }

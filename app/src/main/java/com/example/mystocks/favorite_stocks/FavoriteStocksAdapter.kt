@@ -31,6 +31,10 @@ class FavoriteStocksAdapter(
         return favoriteStocksList.size
     }
 
+    fun isStockLast(): Boolean {
+        return favoriteStocksList.size == 0
+    }
+
     fun setData(list: List<StockModel>) {
         favoriteStocksList.clear()
         favoriteStocksList.addAll(list)
@@ -41,21 +45,22 @@ class FavoriteStocksAdapter(
 
     fun filter(symbols: String) {
         val filteredFavoriteStocksList = mutableListOf<StockModel>()
-        if(symbols.isNotEmpty()) {
+
+        favoriteStocksList = if(symbols.isNotEmpty()) {
             for (stock in firstFavoriteStockList) {
                 if(stock.symbol.toLowerCase(Locale.ROOT).contains(symbols)) filteredFavoriteStocksList.add(stock)
             }
-            favoriteStocksList = filteredFavoriteStocksList
-            notifyDataSetChanged()
+            filteredFavoriteStocksList
+
         } else {
-            favoriteStocksList = firstFavoriteStockList
-            notifyDataSetChanged()
+            firstFavoriteStockList
         }
+        notifyDataSetChanged()
     }
 
-    fun removeItem(position: Int) {
-        favoriteStocksList.removeAt(position)
-        firstFavoriteStockList.removeAt(position)
+    fun removeItem(stock: StockModel, position: Int) {
+        favoriteStocksList.remove(stock)
+        firstFavoriteStockList.remove(stock)
         notifyItemRemoved(position)
     }
 }
