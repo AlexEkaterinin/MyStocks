@@ -33,4 +33,9 @@ class SearchStocksAdapter(
         listStocks.addAll(list)
         notifyDataSetChanged()
     }
+
+    fun clearData() {
+        listStocks.clear()
+        notifyDataSetChanged()
+    }
 }

@@ -22,8 +22,8 @@ class SearchStocksViewHolder(
     private var decreaseColor = 0
 
     init {
-        increaseColor = ContextCompat.getColor(itemView.context, R.color.IncreasePriceColor)
-        decreaseColor = ContextCompat.getColor(itemView.context, R.color.DecreasePriceColor)
+        increaseColor = ContextCompat.getColor(itemView.context, R.color.increasePriceColor)
+        decreaseColor = ContextCompat.getColor(itemView.context, R.color.decreasePriceColor)
     }
 
 

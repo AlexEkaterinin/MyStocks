@@ -7,7 +7,7 @@ interface FavoriteStocksScreenContract {
     interface View {
         fun showFavoriteStocksList(favoriteList: List<StockModel>)
         fun showScreenOfAvailableStocks(isShow: Boolean)
-        fun showError(error: String)
+        fun showError()
     }
 
     interface Presenter {

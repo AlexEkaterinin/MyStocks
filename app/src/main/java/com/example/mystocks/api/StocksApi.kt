@@ -17,7 +17,7 @@ interface StocksApi {
         "qu/quote/?" +
                 "apikey=z5YZZXUlufcRP5FLXDCVCB0sJ2RbYumfJ0bXN7ol2l5MNrtC1ZvhQkdsiozr&"
     )
-    fun getFavoriteStocksList(
-        @Query("symbol") favoriteStocks: String?
+    fun getSpecificStocksList(
+        @Query("symbol") specificStocks: String?
     ): Single<List<StocksInfoResponseType>>
 }

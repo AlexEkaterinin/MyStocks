@@ -1,6 +1,8 @@
 package com.example.mystocks.favorite_stocks
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,10 +25,10 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
 
     private val favoriteStocksAdapter: FavoriteStocksAdapter by lazy {
         FavoriteStocksAdapter(
-            favoriteListener = { stock: StockModel ->
+            favoriteListener = { stock: StockModel, position: Int ->
                 presenter.changeFavorite(stock)
-                stock.isFavorite = !stock.isFavorite
-                favoriteStocksAdapter.notifyDataSetChanged()
+                favoriteStocksAdapter.removeItem(stock, position)
+                if(favoriteStocksAdapter.isStockLast()) showScreenOfAvailableStocks(true)
             }
         )
     }
@@ -50,6 +52,16 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = favoriteStocksAdapter
         }
+
+        binding.searchField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(c: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(c: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(enteredText: Editable?) {
+                favoriteStocksAdapter.filter(enteredText.toString())
+            }
+        })
     }
 
     override fun onResume() {
@@ -57,9 +69,9 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
         presenter.checkAvailableFavoriteStocks()
     }
 
-    override fun onDetach() {
+    override fun onDestroy() {
         presenter.dispose()
-        super.onDetach()
+        super.onDestroy()
     }
 
     override fun showFavoriteStocksList(favoriteList: List<StockModel>) {
@@ -72,7 +84,7 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
         binding.noFavoriteMessage.isVisible(isShow)
     }
 
-    override fun showError(error: String) {
-        Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+    override fun showError() {
+        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_LONG).show()
     }
 }
