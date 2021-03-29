@@ -1,5 +1,6 @@
 package com.example.mystocks
 
+import com.example.mystocks.api.CompanyInfoResponseType
 import com.example.mystocks.api.StocksInfoResponseType
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers

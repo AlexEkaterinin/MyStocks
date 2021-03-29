@@ -1,5 +1,6 @@
 package com.example.mystocks.favorite_stocks
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mystocks.company_profile.CompanyProfileActivity
 import com.example.mystocks.databinding.FavoriteStocksScreenBinding
 import com.example.mystocks.isVisible
 import com.example.mystocks.model.StockModel
@@ -29,6 +31,9 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
                 presenter.changeFavorite(stock)
                 favoriteStocksAdapter.removeItem(stock, position)
                 if(favoriteStocksAdapter.isStockLast()) showScreenOfAvailableStocks(true)
+            },
+            showCompanyProfileListener = { stock: StockModel ->
+                showCompanyProfile(stock)
             }
         )
     }
@@ -86,5 +91,13 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
 
     override fun showError() {
         Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_LONG).show()
+    }
+
+    private fun showCompanyProfile(stock: StockModel) {
+        val intent = Intent(activity, CompanyProfileActivity::class.java)
+        intent.putExtra("symbol", stock.symbol)
+        intent.putExtra("companyName", stock.longName)
+        intent.putExtra("isFavorite", stock.isFavorite)
+        startActivity(intent)
     }
 }

@@ -26,7 +26,7 @@ class SearchStocksPresenter @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { responseList ->
-                        val stockInfoList = responseList.map(mapper::fromResponseToModel)
+                        val stockInfoList = responseList.map(mapper::fromResponseToStockModel)
                         view.showStocksList(stockInfoList)
                     }, {
                         view.showError()
@@ -40,7 +40,7 @@ class SearchStocksPresenter @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ responseList ->
-                    val stockInfoList = responseList.map(mapper::fromResponseToModel)
+                    val stockInfoList = responseList.map(mapper::fromResponseToStockModel)
                     view.showStocksList(stockInfoList)
                 }, {
                     view.showError()

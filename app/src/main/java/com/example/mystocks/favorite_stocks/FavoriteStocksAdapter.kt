@@ -1,5 +1,6 @@
 package com.example.mystocks.favorite_stocks
 
+import android.os.strictmode.UntaggedSocketViolation
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,7 +9,8 @@ import com.example.mystocks.model.StockModel
 import java.util.*
 
 class FavoriteStocksAdapter(
-    private val favoriteListener: (stock: StockModel, position: Int) -> Unit
+    private val favoriteListener: (stock: StockModel, position: Int) -> Unit,
+    private val showCompanyProfileListener: (stock: StockModel) -> Unit
 ) : RecyclerView.Adapter<FavoriteStocksViewHolder>() {
 
     private var favoriteStocksList = mutableListOf<StockModel>()
@@ -19,7 +21,8 @@ class FavoriteStocksAdapter(
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_number, parent, false)
         return FavoriteStocksViewHolder(
             view,
-            favoriteListener
+            favoriteListener,
+            showCompanyProfileListener
         )
     }
 

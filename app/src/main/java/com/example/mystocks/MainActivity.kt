@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showDisconnectedMessage(show: Boolean) {
         binding.layoutDisconnected.isVisible(!show)
+        binding.fragmentsContainer.isVisible(show)
         binding.bottomNavigation.isVisible(show)
     }
 
