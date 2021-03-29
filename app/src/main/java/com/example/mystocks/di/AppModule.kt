@@ -3,6 +3,8 @@ package com.example.mystocks.di
 import androidx.fragment.app.Fragment
 import com.example.mystocks.StockInfoInteractor
 import com.example.mystocks.StockInfoInteractorImpl
+import com.example.mystocks.StockInfoRepository
+import com.example.mystocks.StocksInfoRepositoryImpl
 import com.example.mystocks.favorite_stocks.FavoriteStocksFragment
 import com.example.mystocks.favorite_stocks.FavoriteStocksPresenter
 import com.example.mystocks.favorite_stocks.FavoriteStocksScreenContract
@@ -31,7 +33,11 @@ abstract class AppModule {
     abstract fun bindFavoriteStocksPresenter(impl: FavoriteStocksPresenter): FavoriteStocksScreenContract.Presenter
 
     @Binds
-    abstract fun bindSearchInfoInteractor(impl: StockInfoInteractorImpl): StockInfoInteractor
+    abstract fun bindStocksInfoInteractor(impl: StockInfoInteractorImpl): StockInfoInteractor
+
+    @Binds
+    abstract fun bindStocksInfoRepository(impl: StocksInfoRepositoryImpl): StockInfoRepository
+
 }
 
 @InstallIn(FragmentComponent::class)
