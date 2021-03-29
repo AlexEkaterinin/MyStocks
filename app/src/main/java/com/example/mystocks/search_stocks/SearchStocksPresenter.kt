@@ -1,6 +1,7 @@
 package com.example.mystocks.search_stocks
 
 import com.example.mystocks.StockInfoInteractor
+import com.example.mystocks.StockInfoRepository
 import com.example.mystocks.mapper.StockMapper
 import com.example.mystocks.model.StockModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,7 +13,8 @@ import javax.inject.Inject
 class SearchStocksPresenter @Inject constructor(
     private val mapper: StockMapper,
     private val view: SearchStocksScreenContract.View,
-    private val interactor: StockInfoInteractor
+    private val interactor: StockInfoInteractor,
+    private val repository: StockInfoRepository
 ) : SearchStocksScreenContract.Presenter {
 
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -48,7 +50,7 @@ class SearchStocksPresenter @Inject constructor(
 
     override fun changeFavorite(stock: StockModel) {
         disposables.add(
-            interactor.changeFavorite(stock)
+            repository.changeFavorite(stock)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
