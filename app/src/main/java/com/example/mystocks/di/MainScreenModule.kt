@@ -1,14 +1,12 @@
 package com.example.mystocks.di
 
 import androidx.fragment.app.Fragment
-import com.example.mystocks.StockInfoInteractor
-import com.example.mystocks.StockInfoInteractorImpl
-import com.example.mystocks.StockInfoRepository
-import com.example.mystocks.StocksInfoRepositoryImpl
 import com.example.mystocks.favorite_stocks.FavoriteStocksFragment
 import com.example.mystocks.favorite_stocks.FavoriteStocksPresenter
 import com.example.mystocks.favorite_stocks.FavoriteStocksScreenContract
-import com.example.mystocks.search_stocks.*
+import com.example.mystocks.search_stocks.SearchStocksFragment
+import com.example.mystocks.search_stocks.SearchStocksPresenter
+import com.example.mystocks.search_stocks.SearchStocksScreenContract
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -18,7 +16,7 @@ import dagger.hilt.android.components.FragmentComponent
 
 @InstallIn(FragmentComponent::class)
 @Module
-abstract class AppModule {
+abstract class MainScreenModule {
 
     @Binds
     abstract fun bindSearchStocksFragment(impl: SearchStocksFragment): SearchStocksScreenContract.View
@@ -31,13 +29,6 @@ abstract class AppModule {
 
     @Binds
     abstract fun bindFavoriteStocksPresenter(impl: FavoriteStocksPresenter): FavoriteStocksScreenContract.Presenter
-
-    @Binds
-    abstract fun bindStocksInfoInteractor(impl: StockInfoInteractorImpl): StockInfoInteractor
-
-    @Binds
-    abstract fun bindStocksInfoRepository(impl: StocksInfoRepositoryImpl): StockInfoRepository
-
 }
 
 @InstallIn(FragmentComponent::class)

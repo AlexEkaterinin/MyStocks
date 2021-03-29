@@ -7,7 +7,8 @@ import com.example.mystocks.R
 import com.example.mystocks.model.StockModel
 
 class SearchStocksAdapter(
-    private val favoriteListener: (stock: StockModel) -> Unit
+    private val favoriteListener: (stock: StockModel) -> Unit,
+    private val showCompanyProfileListener: (stock: StockModel) -> Unit
 ) : RecyclerView.Adapter<SearchStocksViewHolder>() {
 
     private val listStocks: MutableList<StockModel> = mutableListOf()
@@ -16,7 +17,8 @@ class SearchStocksAdapter(
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_number, parent, false)
         return SearchStocksViewHolder(
             view,
-            favoriteListener
+            favoriteListener,
+            showCompanyProfileListener
         )
     }
 

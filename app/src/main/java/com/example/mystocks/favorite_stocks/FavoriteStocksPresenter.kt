@@ -23,7 +23,7 @@ class FavoriteStocksPresenter @Inject constructor(
             interactor.getFavoriteStocksList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ responseList ->
-                    val stockInfoList = responseList.map(mapper::fromResponseToModel)
+                    val stockInfoList = responseList.map(mapper::fromResponseToStockModel)
                     view.showFavoriteStocksList(stockInfoList)
                 }, {
                     view.showError()

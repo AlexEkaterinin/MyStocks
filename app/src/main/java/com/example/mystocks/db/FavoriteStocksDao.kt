@@ -17,5 +17,5 @@ interface FavoriteStocksDao {
     fun insertFavoriteStock(stocks: FavoriteStocksEntity)
 
     @Query("DELETE FROM favorite_stocks_table WHERE favorite_symbol LIKE :symbol")
-    fun removeFavoriteStock(symbol: String)
+    fun removeFavoriteStock(symbol: String?)
 }
