@@ -2,6 +2,8 @@ package com.example.mystocks
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import com.example.mystocks.databinding.MainActivityBinding
 import com.example.mystocks.favorite_stocks.FavoriteStocksFragment
@@ -23,25 +25,39 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        showNavigation()
+
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, Observer { isConnected ->
             if (isConnected) {
                 val currentFragment = when (CURRENT_SCREEN_ID) {
-                    R.id.search_stocks -> SearchStocksFragment()
-                    R.id.favorite_stocks -> FavoriteStocksFragment()
-                    else -> searchStocksFragment
+                    R.id.search_stocks -> supportFragmentManager.findFragmentById(R.id.search_stocks)
+                    R.id.favorite_stocks -> supportFragmentManager.findFragmentById(R.id.favorite_stocks)
+                    else -> supportFragmentManager.findFragmentById(R.id.search_stocks)
                 }
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentsContainer, currentFragment)
-                    .commit()
+
+                val oldFragment = when (OLD_SCREEN_ID) {
+                    R.id.search_stocks -> supportFragmentManager.findFragmentById(R.id.search_stocks)
+                    R.id.favorite_stocks -> supportFragmentManager.findFragmentById(R.id.favorite_stocks)
+                    else -> supportFragmentManager.findFragmentById(R.id.search_stocks)
+                }
+
+                if (currentFragment != null && oldFragment != null) {
+                    supportFragmentManager.beginTransaction()
+                        .show(currentFragment)
+                        .hide(oldFragment)
+                        .setMaxLifecycle(currentFragment, Lifecycle.State.RESUMED)
+                        .setMaxLifecycle(oldFragment, Lifecycle.State.STARTED)
+                        .commit()
+                }
 
                 binding.bottomNavigation.setOnNavigationItemSelectedListener(navListener)
                 binding.bottomNavigation.selectedItemId = CURRENT_SCREEN_ID
 
             } else {
                 supportFragmentManager.beginTransaction()
-                    .remove(searchStocksFragment)
-                    .remove(favoriteStocksFragment)
+                    .hide(searchStocksFragment)
+                    .hide(favoriteStocksFragment)
                     .commit()
             }
 
@@ -53,22 +69,39 @@ class MainActivity : AppCompatActivity() {
         when (menuItem.itemId) {
             R.id.search_stocks -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentsContainer, searchStocksFragment)
-                    .addToBackStack(searchStocksFragment::class.java.canonicalName)
+                    .show(searchStocksFragment)
+                    .hide(favoriteStocksFragment)
+                    .setMaxLifecycle(searchStocksFragment, Lifecycle.State.RESUMED)
+                    .setMaxLifecycle(favoriteStocksFragment, Lifecycle.State.STARTED)
                     .commit()
                 CURRENT_SCREEN_ID = R.id.search_stocks
+                OLD_SCREEN_ID = R.id.favorite_stocks
                 true
             }
             R.id.favorite_stocks -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentsContainer, favoriteStocksFragment)
-                    .addToBackStack(favoriteStocksFragment::class.java.canonicalName)
+                    .show(favoriteStocksFragment)
+                    .hide(searchStocksFragment)
+                    .setMaxLifecycle(favoriteStocksFragment, Lifecycle.State.RESUMED)
+                    .setMaxLifecycle(searchStocksFragment, Lifecycle.State.STARTED)
                     .commit()
+
                 CURRENT_SCREEN_ID = R.id.favorite_stocks
+                OLD_SCREEN_ID = R.id.search_stocks
                 true
             }
             else -> false
         }
+    }
+
+    private fun showNavigation() {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragmentsContainer, searchStocksFragment)
+            .add(R.id.fragmentsContainer, favoriteStocksFragment)
+            .hide(favoriteStocksFragment)
+            .setMaxLifecycle(searchStocksFragment, Lifecycle.State.RESUMED)
+            .setMaxLifecycle(favoriteStocksFragment, Lifecycle.State.STARTED)
+            .commit()
     }
 
     private fun showDisconnectedMessage(show: Boolean) {
@@ -79,5 +112,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private var CURRENT_SCREEN_ID = R.id.search_stocks
+        private var OLD_SCREEN_ID = R.id.favorite_stocks
     }
 }
