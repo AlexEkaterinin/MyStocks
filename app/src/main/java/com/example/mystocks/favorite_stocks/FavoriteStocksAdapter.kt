@@ -1,6 +1,5 @@
 package com.example.mystocks.favorite_stocks
 
-import android.os.strictmode.UntaggedSocketViolation
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
