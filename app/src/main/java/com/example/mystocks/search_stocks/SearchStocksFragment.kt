@@ -19,10 +19,10 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchStocksFragment : Fragment(), SearchStocksScreenContract.View {
+class SearchStocksFragment : Fragment(), SearchStocksContractView {
 
     @Inject
-    lateinit var presenter: SearchStocksScreenContract.Presenter
+    lateinit var presenter: SearchStocksContractPresenter
 
     private lateinit var binding: SearchStocksScreenBinding
 
