@@ -2,7 +2,9 @@ package com.example.mystocks.search_stocks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mystocks.DiffCallback
 import com.example.mystocks.R
 import com.example.mystocks.model.StockModel
 
@@ -11,7 +13,7 @@ class SearchStocksAdapter(
     private val showCompanyProfileListener: (stock: StockModel) -> Unit
 ) : RecyclerView.Adapter<SearchStocksViewHolder>() {
 
-    private val listStocks: MutableList<StockModel> = mutableListOf()
+    private val stocksList: MutableList<StockModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchStocksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_number, parent, false)
@@ -23,21 +25,25 @@ class SearchStocksAdapter(
     }
 
     override fun onBindViewHolder(holder: SearchStocksViewHolder, position: Int) {
-        holder.bind(listStocks[position])
+        holder.bind(stocksList[position])
     }
 
     override fun getItemCount(): Int {
-        return listStocks.size
+        return stocksList.size
     }
 
     fun setData(list: List<StockModel>) {
-        listStocks.clear()
-        listStocks.addAll(list)
-        notifyDataSetChanged()
+        val oldData = stocksList.toList()
+        stocksList.clear()
+        stocksList.addAll(list)
+
+        DiffUtil
+            .calculateDiff(DiffCallback(stocksList, oldData), false)
+            .dispatchUpdatesTo(this)
     }
 
     fun clearData() {
-        listStocks.clear()
+        stocksList.clear()
         notifyDataSetChanged()
     }
 }

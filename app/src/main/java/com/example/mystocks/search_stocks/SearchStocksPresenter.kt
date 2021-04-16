@@ -1,6 +1,6 @@
 package com.example.mystocks.search_stocks
 
-import com.example.mystocks.StockInfoInteractor
+import com.example.mystocks.SearchStocksInteractor
 import com.example.mystocks.StockInfoRepository
 import com.example.mystocks.mapper.StockMapper
 import com.example.mystocks.model.StockModel
@@ -11,11 +11,10 @@ import javax.inject.Inject
 
 
 class SearchStocksPresenter @Inject constructor(
-    private val mapper: StockMapper,
-    private val view: SearchStocksScreenContract.View,
-    private val interactor: StockInfoInteractor,
+    private val view: SearchStocksContractView,
+    private val interactor: SearchStocksInteractor,
     private val repository: StockInfoRepository
-) : SearchStocksScreenContract.Presenter {
+) : SearchStocksContractPresenter {
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 
@@ -26,8 +25,7 @@ class SearchStocksPresenter @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { responseList ->
-                        val stockInfoList = responseList.map(mapper::fromResponseToStockModel)
-                        view.showStocksList(stockInfoList)
+                        view.showStocksList(responseList)
                     }, {
                         view.showError()
                     })
@@ -40,8 +38,7 @@ class SearchStocksPresenter @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ responseList ->
-                    val stockInfoList = responseList.map(mapper::fromResponseToStockModel)
-                    view.showStocksList(stockInfoList)
+                    view.showStocksList(responseList)
                 }, {
                     view.showError()
                 })

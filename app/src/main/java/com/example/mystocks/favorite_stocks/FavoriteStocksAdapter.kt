@@ -2,19 +2,18 @@ package com.example.mystocks.favorite_stocks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mystocks.DiffCallback
 import com.example.mystocks.R
 import com.example.mystocks.model.StockModel
-import java.util.*
 
 class FavoriteStocksAdapter(
-    private val favoriteListener: (stock: StockModel, position: Int) -> Unit,
+    private val favoriteListener: (stock: StockModel) -> Unit,
     private val showCompanyProfileListener: (stock: StockModel) -> Unit
 ) : RecyclerView.Adapter<FavoriteStocksViewHolder>() {
 
     private var favoriteStocksList = mutableListOf<StockModel>()
-
-    private val firstFavoriteStockList = mutableListOf<StockModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteStocksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_number, parent, false)
@@ -33,36 +32,13 @@ class FavoriteStocksAdapter(
         return favoriteStocksList.size
     }
 
-    fun isStockLast(): Boolean {
-        return favoriteStocksList.size == 0
-    }
-
-    fun setData(list: List<StockModel>) {
+    fun setData(newData: List<StockModel>) {
+        val oldData = favoriteStocksList.toList()
         favoriteStocksList.clear()
-        favoriteStocksList.addAll(list)
-        firstFavoriteStockList.clear()
-        firstFavoriteStockList.addAll(list)
-        notifyDataSetChanged()
-    }
+        favoriteStocksList.addAll(newData)
 
-    fun filter(symbols: String) {
-        val filteredFavoriteStocksList = mutableListOf<StockModel>()
-
-        favoriteStocksList = if(symbols.isNotEmpty()) {
-            for (stock in firstFavoriteStockList) {
-                if(stock.symbol.toLowerCase(Locale.ROOT).contains(symbols)) filteredFavoriteStocksList.add(stock)
-            }
-            filteredFavoriteStocksList
-
-        } else {
-            firstFavoriteStockList
-        }
-        notifyDataSetChanged()
-    }
-
-    fun removeItem(stock: StockModel, position: Int) {
-        favoriteStocksList.remove(stock)
-        firstFavoriteStockList.remove(stock)
-        notifyItemRemoved(position)
+        DiffUtil
+            .calculateDiff(DiffCallback(favoriteStocksList, oldData), false)
+            .dispatchUpdatesTo(this)
     }
 }

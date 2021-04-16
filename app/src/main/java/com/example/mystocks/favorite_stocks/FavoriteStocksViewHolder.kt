@@ -10,7 +10,7 @@ import com.example.mystocks.model.StockModel
 
 class FavoriteStocksViewHolder(
     itemView: View,
-    private val favoriteListener: (stock: StockModel, position: Int) -> Unit,
+    private val favoriteListener: (stock: StockModel) -> Unit,
     private val showCompanyProfileListener: (stock: StockModel) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
 
@@ -51,7 +51,7 @@ class FavoriteStocksViewHolder(
         }
 
         favoriteBtn.setOnClickListener {
-            favoriteListener.invoke(item, adapterPosition)
+            favoriteListener.invoke(item)
         }
     }
 }

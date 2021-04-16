@@ -1,6 +1,5 @@
 package com.example.mystocks.favorite_stocks
 
-import com.example.mystocks.StockInfoInteractor
 import com.example.mystocks.StockInfoRepository
 import com.example.mystocks.mapper.StockMapper
 import com.example.mystocks.model.StockModel
@@ -10,11 +9,10 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class FavoriteStocksPresenter @Inject constructor(
-    private val mapper: StockMapper,
-    private val view: FavoriteStocksScreenContract.View,
-    private val interactor: StockInfoInteractor,
+    private val view: FavoriteStocksContractView,
+    private val interactor: FavoriteStocksInteractor,
     private val repository: StockInfoRepository
-) : FavoriteStocksScreenContract.Presenter {
+) : FavoriteStocksContractPresenter {
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 
@@ -23,8 +21,7 @@ class FavoriteStocksPresenter @Inject constructor(
             interactor.getFavoriteStocksList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ responseList ->
-                    val stockInfoList = responseList.map(mapper::fromResponseToStockModel)
-                    view.showFavoriteStocksList(stockInfoList)
+                    view.showFavoriteStocksList(responseList)
                 }, {
                     view.showError()
                 })
@@ -48,6 +45,29 @@ class FavoriteStocksPresenter @Inject constructor(
                 .subscribe { favoriteListIsEmpty ->
                     view.showScreenOfAvailableStocks(favoriteListIsEmpty)
                     if (!favoriteListIsEmpty) getFavoriteStocksList()
+                }
+        )
+    }
+
+    override fun filterStocksList(symbols: String) {
+        disposables.add(
+            interactor.filterStocksList(symbols)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { filteredList ->
+                    view.showFavoriteStocksList(filteredList)
+                }
+        )
+    }
+
+    override fun removeFavoriteStock(stock: StockModel) {
+        disposables.add(
+            interactor.removeFavoriteStock(stock)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { favoriteStockList ->
+                    if(favoriteStockList.isEmpty()) view.showScreenOfAvailableStocks(true)
+                    view.showFavoriteStocksList(favoriteStockList)
                 }
         )
     }

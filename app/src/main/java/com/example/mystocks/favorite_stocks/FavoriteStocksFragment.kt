@@ -18,19 +18,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
+class FavoriteStocksFragment : Fragment(), FavoriteStocksContractView {
 
     @Inject
-    lateinit var presenter: FavoriteStocksScreenContract.Presenter
+    lateinit var presenter: FavoriteStocksContractPresenter
 
     private lateinit var binding: FavoriteStocksScreenBinding
 
     private val favoriteStocksAdapter: FavoriteStocksAdapter by lazy {
         FavoriteStocksAdapter(
-            favoriteListener = { stock: StockModel, position: Int ->
+            favoriteListener = { stock: StockModel ->
                 presenter.changeFavorite(stock)
-                favoriteStocksAdapter.removeItem(stock, position)
-                if(favoriteStocksAdapter.isStockLast()) showScreenOfAvailableStocks(true)
+                presenter.removeFavoriteStock(stock)
             },
             showCompanyProfileListener = { stock: StockModel ->
                 showCompanyProfile(stock)
@@ -64,7 +63,7 @@ class FavoriteStocksFragment : Fragment(), FavoriteStocksScreenContract.View {
             override fun onTextChanged(c: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(enteredText: Editable?) {
-                favoriteStocksAdapter.filter(enteredText.toString())
+                presenter.filterStocksList(enteredText.toString())
             }
         })
     }
