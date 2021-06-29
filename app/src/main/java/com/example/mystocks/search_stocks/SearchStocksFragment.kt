@@ -77,7 +77,7 @@ class SearchStocksFragment : Fragment(), SearchStocksContractView {
                 } else {
                     timer.schedule(object : TimerTask() {
                         override fun run() {
-                        presenter.checkAvailableSearchedStocks(enteredText.toString())
+                        presenter.getSearchedStock(enteredText.toString())
                         }
                     }, 1000)
                 }

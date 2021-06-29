@@ -10,7 +10,5 @@ interface SearchStocksContractPresenter {
 
     fun changeFavorite(stock: StockModel)
 
-    fun checkAvailableSearchedStocks(symbol: String)
-
     fun dispose()
 }

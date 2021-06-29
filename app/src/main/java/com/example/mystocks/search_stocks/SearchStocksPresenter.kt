@@ -2,7 +2,6 @@ package com.example.mystocks.search_stocks
 
 import com.example.mystocks.SearchStocksInteractor
 import com.example.mystocks.StockInfoRepository
-import com.example.mystocks.mapper.StockMapper
 import com.example.mystocks.model.StockModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -38,7 +37,11 @@ class SearchStocksPresenter @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ responseList ->
-                    view.showStocksList(responseList)
+                    if(responseList.isEmpty()) {
+                        view.showNotFoundStocksMessage(true)
+                    } else {
+                        view.showStocksList(responseList)
+                    }
                 }, {
                     view.showError()
                 })
@@ -51,20 +54,6 @@ class SearchStocksPresenter @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe()
-        )
-    }
-
-    override fun checkAvailableSearchedStocks(symbol: String) {
-        disposables.add(
-            interactor.checkAvailableSearchedStocks(symbol)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ isSearchedStockAvailable ->
-                    if (isSearchedStockAvailable) {
-                        getSearchedStock(symbol)
-                    } else view.showNotFoundStocksMessage(true)
-                }, {
-                    view.showNotFoundStocksMessage(true)
-                })
         )
     }
 

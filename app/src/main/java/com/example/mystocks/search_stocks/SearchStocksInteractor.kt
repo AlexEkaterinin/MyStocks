@@ -12,20 +12,12 @@ interface SearchStocksInteractor {
     fun getSearchedStock(symbol: String): Single<List<StockModel>>
 
     fun getDefaultStocksList(): Single<List<StockModel>>
-
-    fun checkAvailableSearchedStocks(symbol: String): Single<Boolean>
 }
 
 class SearchStocksInteractorImpl @Inject constructor(
     private val repository: StockInfoRepository,
     private val mapper: StockMapper
 ) : SearchStocksInteractor {
-
-    override fun checkAvailableSearchedStocks(symbol: String): Single<Boolean> =
-        getSearchedStock(symbol)
-            .map { responseList ->
-                isCorrectResponseStocks(responseList)
-            }
 
     override fun getSearchedStock(symbol: String): Single<List<StockModel>> =
         Single.zip(
@@ -37,6 +29,11 @@ class SearchStocksInteractorImpl @Inject constructor(
                 responseList.map(mapper::fromResponseToStockModel)
             }
         )
+            .map { stockList ->
+                stockList.filter { stockModel ->
+                    stockModel.price != null && stockModel.currency != null && stockModel.change != null
+                }
+            }
 
     override fun getDefaultStocksList(): Single<List<StockModel>> =
         Single.zip(
@@ -48,10 +45,6 @@ class SearchStocksInteractorImpl @Inject constructor(
                 responseList.map(mapper::fromResponseToStockModel)
             }
         )
-
-    private fun isCorrectResponseStocks(stocksList: List<StockModel>): Boolean {
-        return !(stocksList.first().price == null || stocksList.first().currency == null || stocksList.first().change == null || stocksList.isEmpty())
-    }
 
     private fun checkFavoriteStocks(
         responseList: List<StocksInfoResponseType>,
